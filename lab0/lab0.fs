@@ -4,9 +4,15 @@ open System
 open System.Net
 open System.Collections.Specialized
 
-let (email, name) = ("", "") // адрес почты и фамилия с инициалами
+let (email, name) = ("sharuev.ds@phystech.edu", "Шаруев Д. С.") // адрес почты и фамилия с инициалами
 
-let pascal c r = 1 // а тут решение
+let pascal c r = 
+  let rec C n k = 
+    match (n, k) with
+      | (n, k) when k = 0 || k = n -> 1
+      | (n, k) when n < k -> 0
+      | _ -> (C (n-1) k) + (C (n-1) (k-1))
+  C (r) (c)
 
 let printIt n = 
   "[" +
@@ -14,6 +20,8 @@ let printIt n =
     |> List.map (fun x -> x.ToString())
     |> List.reduce (fun x y -> x + "," + y) )
   + "]"
+
+printIt 20
 
 let main () = 
   let values = new NameValueCollection()
@@ -26,3 +34,5 @@ let main () =
   let responseString = Text.Encoding.Default.GetString(response)
 
   printf "%A\n" responseString
+
+main ()

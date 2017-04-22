@@ -1,27 +1,36 @@
 
-reverseAll — функция, получающая на вход
+(*reverseAll — функция, получающая на вход
 списочную структуру и обращающая все её
-элементы, а также её саму.
+элементы, а также её саму.*)
 // 'a list list -> 'a list list
-
+let reverseAll = 
+  List.rev >> (List.map (List.rev)) 
 reverseAll [[1;2];[3;4;5];[6]]
 
-
-elem — функция, возвращающая номер первого
-вхождения заданного атома в список.
+(*elem — функция, возвращающая номер первого
+вхождения заданного атома в список.*)
+// Индексация с нуля
 // 'a -> 'a list -> int
 
+let elem a lst = 
+  let rec elem' index = function
+    | [] -> -1
+    | x::xs when x = a -> index
+    | x::xs -> elem' (index+1) xs
+  elem' 0 lst
+  
+elem 2 [1;2;3;4]
 
-set — функция, возвращающая список из
+(*set — функция, возвращающая список из
 всех атомов, содержащихся в заданном
 списке. Каждый атом должен
 присутствовать в результирующем списке в
-единственном числе.
+единственном числе.*)
 
-freq — функция, возвращающая список пар
+(*freq — функция, возвращающая список пар
 (символ, частота). Каждая пара определяет
 атом из заданного списка и частоту его
-вхождения в этот список.
+вхождения в этот список.*)
 
 (+) 9 5 
 
@@ -379,7 +388,18 @@ seq8 |> Seq.iter (printf "%i ")
 let fibb = Seq.unfold (fun state -> Some(fst state + snd state, (snd state, fst state + snd state))) (0,1)
 Seq.take 20 fibb
 
-// coins
+// coins Задача про размен монет из SICP 
+// Сколько способов размена?
+// Задача о капусте
+let rec cc (coins: int list) = function
+  | 0 -> 1
+  | n when n<0 -> 0
+  | n -> match coins with 
+          | [] -> 0
+          | x::xs -> (cc coins (n-x)) + (cc xs n)
+
+cc [1; 2; 5; 10] 5
+
 
 type Anniversary =
  Birthday of string * int * int * int
@@ -422,6 +442,9 @@ List.map who anniversaries
 3) Kurt Cobain dead 1994-4-5
 *)
 
+Seq.zip (Seq.initInfinite(fun x-> x+1)) (seq <| List.map showAnniversary anniversaries) |> Seq.iter (fun (n, x) -> printf "%d) %s\n" n x)
+
+
 type Point = { x  : float; y : float }
 
 let a = { x = 13.22 ; y = 8.99 }
@@ -438,6 +461,21 @@ Some 42 :: [Some "str", None] // ?
 type Option<'a> =
   Some of 'a
   | None
+
+// 'a -> 'a list -> int option
+let indexOf a lst = 
+  let rec indexOf' index lst = function
+    | [] -> None
+    | x::xs when x = a -> index
+    | x::xs -> indexOf (index+1) xs
+  indexOf' 0 lst
+
+let indexOf a lst = 
+  List.fold (fun acc x -> match x with 
+    | a -> 0
+    | x::xs when x = a:
+
+
 
 type 'a List =  // haskell!!!
   Nil
@@ -476,6 +514,19 @@ contains b 5
 contains b 6
 
 // union, intersect, diff, filter, forAll, exists 
+let union (a:Set) (b:Set) = 
+  fun x -> (a x) || (b x)
+
+contains (union b c) 8
+
+let intersect (a:Set) (b:Set) = 
+  fun x -> (a x) && (b x)
+
+let diff (a:Set) (b:Set) = 
+  fun x -> (a x) && not (b x)
+
+let filter (a:Set) pred = 
+  fun x -> (a x) && (pred x)
 
 
 
